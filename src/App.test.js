@@ -1,8 +1,26 @@
-import { render, screen } from '@testing-library/react';
+import { render, screen, fireEvent } from '@testing-library/react';
 import App from './App';
 
-test('renders learn react link', () => {
+test('entry added to table on form submit', () => {
   render(<App />);
-  const linkElement = screen.getByText(/learn react/i);
-  expect(linkElement).toBeInTheDocument();
+
+  const nameInput = screen.getByLabelText('name-input');
+  const salaryInput = screen.getByLabelText('salary-input');
+  const submitButton = screen.getByLabelText('form-submit');
+
+  fireEvent.change(nameInput, { target: { value: 'Elliot Spaull' } });
+  fireEvent.change(salaryInput, { target: { value: 60000 } });
+
+  expect(nameInput.value).toBe('Elliot Spaull');
+  expect(salaryInput.value).toBe('60000');
+
+  let tableRow = screen.queryByLabelText('Elliot Spaull-4500');
+
+  expect(tableRow).toBeNull();
+
+  fireEvent.click(submitButton);
+
+  tableRow = screen.queryByLabelText('Elliot Spaull-4500');
+
+  expect(tableRow).toBeInTheDocument();
 });

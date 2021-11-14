@@ -1,23 +1,25 @@
-import logo from './logo.svg';
+import { useState } from 'react';
+
 import './App.css';
+import TaxList from './components/TaxList';
+import TaxForm from './components/TaxForm';
+
+import { calcTax } from './utils/utils';
 
 function App() {
+  const [taxRecords, setTaxRecords] = useState([]);
+
+  const handleFormSubmit = ({ name, salary }) => {
+    setTaxRecords((oldRecords) => [
+      ...oldRecords,
+      { name, income: calcTax(Number(salary)) },
+    ]);
+  };
+
   return (
     <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
+      <TaxForm handleFormSubmit={handleFormSubmit} />
+      <TaxList items={taxRecords} />
     </div>
   );
 }

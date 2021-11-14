@@ -1,70 +1,39 @@
-# Getting Started with Create React App
+# Elliot Spaull - MYOB Tech Test
 
-This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
+First of all, I know this was supposed to be a console application, but I decided to write a very basic web app (bootstrapped with create-react-app) instead as I thought it would be a better showcase of my skills. I really hope this is ok!
 
-## Available Scripts
+## Running the project
 
-In the project directory, you can run:
+To run the project, please run the command `yarn && yarn start` at the root of the project. It will automatically open a browser where you can begin entering names and salaries.
 
-### `yarn start`
+## Testing the project
 
-Runs the app in the development mode.\
-Open [http://localhost:3000](http://localhost:3000) to view it in the browser.
+To run the tests, please run the command `yarn test` (after having already installed dependencies via the previous command).
 
-The page will reload if you make edits.\
-You will also see any lint errors in the console.
+## Why I built the solution the way I did
 
-### `yarn test`
+I chose the simplest method I could think of to get something up and running quickly, and decided to go for a more visual approach than a console application. I chose to use create react app as it handles a lot of boiler plate, such as setting up webpack and babel, and also sets up jest/react-testing-library, allowing me to easily write tests.
 
-Launches the test runner in the interactive watch mode.\
-See the section about [running tests](https://facebook.github.io/create-react-app/docs/running-tests) for more information.
+I am comfortable setting up React projects from scratch, creating a webpack config etc., but decided to use CRA to save some time.
 
-### `yarn build`
+## Design decisions
 
-Builds the app for production to the `build` folder.\
-It correctly bundles React in production mode and optimizes the build for the best performance.
+There weren't too many design decisions to take into account as the task is quite straight forward, but I made sure to split everything out as much as I felt was necessary. Each calculation sits in its own method, with the main 'calculate' method just grabbing values from each of them and returning the result.
 
-The build is minified and the filenames include the hashes.\
-Your app is ready to be deployed!
+The biggest design decision was to pass the tax brackets as a 'taxConfig' object to the 'calcIncomeTax' method. This allows me to very easily change the calculations that are being done, and also simplifies testing. If the method was pulling from some static set of tax brackets then any changes to those brackets would require re-doing the tests.
 
-See the section about [deployment](https://facebook.github.io/create-react-app/docs/deployment) for more information.
+The front end is very basic, just a form that takes two inputs, does the calculation, and spits out the results. I split these into a couple of tiny components which just handle one thing each.
 
-### `yarn eject`
+## Assumptions
 
-**Note: this is a one-way operation. Once you `eject`, you can’t go back!**
+I made a few assumptions, such as thinking that we probably won't be passing any junk data. There is some very basic validation to check that you're at least passing in a number, but I've assumed that we won't be dealing with any negative numbers. It won't error, but the calculations would obviously be weird...
 
-If you aren’t satisfied with the build tool and configuration choices, you can `eject` at any time. This command will remove the single build dependency from your project.
+I've also assumed that any money below the lower threshold of the first taxable bracket is always tax free, which is why in the code you can see I immediately subtract the lower threshold of the first taxable bracket from the base salary to get taxableSalary. This will still work just fine if the 0 to X bracket is added in the taxConfig with any tax rate.
 
-Instead, it will copy all the configuration files and the transitive dependencies (webpack, Babel, ESLint, etc) right into your project so you have full control over them. All of the commands except `eject` will still work, but they will point to the copied scripts so you can tweak them. At this point you’re on your own.
+One last assumption is that we are all ok with rounding the monetary values and not dealing with tiny fractions of pennies.
 
-You don’t have to ever use `eject`. The curated feature set is suitable for small and middle deployments, and you shouldn’t feel obligated to use this feature. However we understand that this tool wouldn’t be useful if you couldn’t customize it when you are ready for it.
+## Trade-offs
 
-## Learn More
+I didn't spend a lot of time on the UI, as I'm sure you can tell. It's functional, but it's certainly not pretty!
 
-You can learn more in the [Create React App documentation](https://facebook.github.io/create-react-app/docs/getting-started).
-
-To learn React, check out the [React documentation](https://reactjs.org/).
-
-### Code Splitting
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/code-splitting](https://facebook.github.io/create-react-app/docs/code-splitting)
-
-### Analyzing the Bundle Size
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size](https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size)
-
-### Making a Progressive Web App
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app](https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app)
-
-### Advanced Configuration
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/advanced-configuration](https://facebook.github.io/create-react-app/docs/advanced-configuration)
-
-### Deployment
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/deployment](https://facebook.github.io/create-react-app/docs/deployment)
-
-### `yarn build` fails to minify
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify](https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify)
+I also used a basic config for the tax brackets. It could be simplified by having the lower bound be pulled from the upper bound of the previous bracket, then perhaps have a separate 'taxFreeAllowance' property in there too.
